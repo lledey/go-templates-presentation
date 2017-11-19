@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Go templates</title>
+
+		<meta name="description" content="An introduction to Go templates">
+		<meta name="author" content="Louis Ledey">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Go Templates</h1>
+					<p>
+						package "text/template"
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Contexte</h2>
+					</section>
+					<section>
+						<h3>SMS transationnels</h3>
+						<p>TODO image SMS</p>
+					</section>
+					<section>
+						<h3>Problème ?</h3>
+					</section>
+					<section>
+						<h3>💸</h3>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Le but</h2>
+					</section>
+					<section>
+						<h2>✨ Push ✨</h2>
+					</section>
+					<section>
+						<h2>Votre chauffeur arrive</h2>
+						<p>TODO Custom CSS</p>
+						<table>
+							<tbody>
+								<tr>
+									<td class="fragment" data-fragment-index=3>Push basique</td>
+									<td class="fragment">Push avec ETA</td>
+								</tr>
+								<tr>
+									<td class="fragment">Push avec prix</td>
+									<td class="fragment">Push avec date de réservation</td>
+								</tr>
+								<tr>
+									<td class="fragment">Push avec meetup instruction</td>
+									<td class="fragment">Push avec redisaptch</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section data-transition="none">
+						<h2>Your driver is coming</h2>
+						<p>TODO Custom CSS</p>
+						<table>
+							<tbody>
+								<tr>
+									<td>Push basique</td>
+									<td>Push avec ETA</td>
+								</tr>
+								<tr>
+									<td>Push avec prix</td>
+									<td>Push avec date de réservation</td>
+								</tr>
+								<tr>
+									<td>Push avec meetup instruction</td>
+									<td>Push avec redisaptch</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Templates</h2>
+					</section>
+					<section>
+						<h2>TODO DEFINITION</h2>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>La base</h2>
+					</section>
+					<section>
+						<p>« Votre chauffeur <span class="fragment highlight-red">Patrick</span> arrive dans <span class="fragment highlight-red">2</span> minutes. »</p>
+					</section>
+					<section>
+						<!-- https://play.golang.org/p/haZK9HRBaO -->
+						<pre><code class="hljs" data-trim>
+type Substitutions struct {
+	DriverName string
+	ETA        int
+}
+
+func main() {
+	tmpl := template.New("")
+
+	tmpl.Parse("Votre chauffeur {{.DriverName}} arrive dans {{.ETA}} minutes.")
+
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2})
+}
+						</code></pre>
+						<pre class="fragment"><code class="hljs" data-trim>
+Votre chauffeur Patrick arrive dans 2 minutes.
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Conditions</h2>
+					</section>
+					<section>
+						<p>« Votre chauffeur Patrick arrive <span class="fragment highlight-red">prochainement</span>. »</p>
+						<p class="fragment">« Votre chauffeur Patrick arrive <span class="fragment highlight-red">dans 2 minutes</span>. »</p>
+					</section>
+					<section>
+						<!-- https://play.golang.org/p/d4g9030VNg -->
+						<pre><code class="hljs" data-trim>
+type Substitutions struct {
+	DriverName string
+	ETA        int
+}
+
+func main() {
+	tmpl := template.New("")
+
+	tmpl, _ = tmpl.Parse("Votre chauffeur {{.DriverName}} arrive {{if gt .ETA 0}}dans {{.ETA}} minutes{{else}}prochainement{{end}}.")
+
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2})
+	tmpl.Execute(os.Stdout, &Substitutions{"Georges", 0})
+}
+						</code></pre>
+						<pre class="fragment"><code class="hljs" data-trim>
+Votre chauffeur Patrick arrive dans 2 minutes.
+Votre chauffeur Georges arrive prochainement.
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Sous templates</h2>
+					</section>
+					<section>
+						<p>TODO GoDoc screenshot</p>
+					</section>
+					<section>
+						<!-- https://play.golang.org/p/KvOIazz19W -->
+						<pre><code class="hljs" data-trim>
+type Substitutions struct {
+	DriverName string
+	ETA        int
+}
+
+func main() {
+	tmpl := template.New("")
+
+	tmpl.New("driver_en_route.eta").Parse("{{if gt .ETA 0}}dans {{.ETA}} minutes{{else}}prochainement{{end}}")
+	tmpl, _ = tmpl.Parse(`Votre chauffeur {{.DriverName}} arrive {{template "driver_en_route.eta" .}}.`)
+
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2})
+	tmpl.Execute(os.Stdout, &Substitutions{"Georges", 0})
+}
+						</code></pre>
+						<pre class="fragment"><code class="hljs" data-trim>
+Votre chauffeur Patrick arrive dans 2 minutes.
+Votre chauffeur Georges arrive prochainement.
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Dot</h2>
+					</section>
+					<section>
+						<p>TODO IMAGE SMS ASSISTANT</p>
+					</section>
+					<section>
+						<p><small>tmpl.Parse(`Votre chauffeur {{<span class="fragment highlight-red">.DriverName</span>}} arrive {{template "driver_en_route.eta" <span class="fragment highlight-red">.</span>}}.`)</small></p>
+					</section>
+					<section>
+						<!-- https://play.golang.org/p/YibGb57rko -->
+						<pre><code class="hljs" data-trim>
+type Assistant struct {
+	IsAssistant bool
+	RiderName   string
+}
+
+type Substitutions struct {
+	DriverName string
+	ETA        int
+	Assistant  Assistant
+}
+
+func main() {
+	tmpl := template.New("")
+
+	tmpl.New("assistant").Parse("{{if eq .IsAssistant true}}[SMS envoyé à {{.RiderName}}] {{end}}")
+	tmpl.New("driver_en_route.eta").Parse("{{if gt .ETA 0}}dans {{.ETA}} minutes{{else}}prochainement{{end}}")
+	tmpl.New("driver_en_route").Parse(`Votre chauffeur {{.DriverName}} arrive {{template "driver_en_route.eta" .}}.`)
+
+	tmpl, _ = tmpl.Parse(`{{template "assistant" .Assistant}}{{template "driver_en_route" .}}`)
+
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2, Assistant{}})
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2, Assistant{true, "Bernard"}})
+}
+						</code></pre>
+						<pre class="fragment"><code class="hljs" data-trim>
+Votre chauffeur Patrick arrive dans 2 minutes.
+[SMS envoyé à Bernard] Votre chauffeur Patrick arrive dans 2 minutes.
+						</code></pre>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
