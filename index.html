@@ -39,9 +39,8 @@
 			<div class="slides">
 				<section>
 					<h1>Go Templates</h1>
-					<p>
-						package "text/template"
-					</p>
+					<p><small>Louis Ledey - <a href="https://chauffeur-prive.com">Chauffeur Privé</a></small></p>
+					<img style="width: 10%" src="img/cp_logo.svg"></img>
 				</section>
 
 				<section>
@@ -84,7 +83,7 @@
 									<td class="fragment"><img src="img/push_fr_cfm.PNG"></img></td>
 								</tr>
 								<tr>
-									<td class="fragment" colspan="2"><img src="img/push_fr_all.PNG"></img></td>
+									<td class="fragment" colspan="2"><img style="max-width: 50%" src="img/push_fr_all.PNG"></img></td>
 								</tr>
 							</tbody>
 						</table>
@@ -106,7 +105,7 @@
 									<td><img src="img/push_en_cfm.PNG"></img></td>
 								</tr>
 								<tr>
-									<td colspan="2"><img src="img/push_en_all.PNG"></img></td>
+									<td colspan="2"><img style="max-width: 50%" src="img/push_en_all.PNG"></img></td>
 								</tr>
 							</tbody>
 						</table>
@@ -118,7 +117,7 @@
 						<h2>Templates</h2>
 					</section>
 					<section>
-						<h2>text/template</h2>
+						<h2>package "text/template"</h2>
 						<ul>
 							<li class="fragment">data-driven templates for generating textual output</li>
 							<li class="fragment">executed by applying them to a data structure</li>
@@ -136,7 +135,7 @@
 					</section>
 					<section>
 						<!-- https://play.golang.org/p/haZK9HRBaO -->
-						<pre><code class="hljs" data-trim>
+						<pre><code class="hljs go" data-trim>
 type Substitutions struct {
 	DriverName string
 	ETA        int
@@ -150,7 +149,7 @@ func main() {
 	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2})
 }
 						</code></pre>
-						<pre class="fragment"><code class="hljs" data-trim>
+						<pre class="fragment"><code class="hljs go" data-trim>
 Votre chauffeur Patrick arrive dans 2 minutes.
 						</code></pre>
 					</section>
@@ -166,7 +165,7 @@ Votre chauffeur Patrick arrive dans 2 minutes.
 					</section>
 					<section>
 						<!-- https://play.golang.org/p/d4g9030VNg -->
-						<pre><code class="hljs" data-trim>
+						<pre><code class="hljs go" data-trim>
 type Substitutions struct {
 	DriverName string
 	ETA        int
@@ -181,7 +180,7 @@ func main() {
 	tmpl.Execute(os.Stdout, &Substitutions{"Georges", 0})
 }
 						</code></pre>
-						<pre class="fragment"><code class="hljs" data-trim>
+						<pre class="fragment"><code class="hljs go" data-trim>
 Votre chauffeur Patrick arrive dans 2 minutes.
 Votre chauffeur Georges arrive prochainement.
 						</code></pre>
@@ -197,7 +196,7 @@ Votre chauffeur Georges arrive prochainement.
 					</section>
 					<section>
 						<!-- https://play.golang.org/p/KvOIazz19W -->
-						<pre><code class="hljs" data-trim>
+						<pre><code class="hljs go" data-trim>
 type Substitutions struct {
 	DriverName string
 	ETA        int
@@ -213,7 +212,7 @@ func main() {
 	tmpl.Execute(os.Stdout, &Substitutions{"Georges", 0})
 }
 						</code></pre>
-						<pre class="fragment"><code class="hljs" data-trim>
+						<pre class="fragment"><code class="hljs go" data-trim>
 Votre chauffeur Patrick arrive dans 2 minutes.
 Votre chauffeur Georges arrive prochainement.
 						</code></pre>
@@ -231,8 +230,8 @@ Votre chauffeur Georges arrive prochainement.
 						<p><small>tmpl.Parse(`Votre chauffeur {{<span class="fragment highlight-red">.DriverName</span>}} arrive {{template "driver_en_route.eta" <span class="fragment highlight-red">.</span>}}.`)</small></p>
 					</section>
 					<section>
-						<!-- https://play.golang.org/p/cwbryeo3fi -->
-						<pre><code class="hljs" data-trim>
+						<!-- https://play.golang.org/p/jiriRsD9iT -->
+						<pre><code class="hljs go" data-trim>
 type Assistant struct {
 	IsAssistant bool
 	RiderName   string
@@ -240,7 +239,6 @@ type Assistant struct {
 
 type Substitutions struct {
 	DriverName string
-	ETA        int
 	Assistant  Assistant
 }
 
@@ -248,24 +246,24 @@ func main() {
 	tmpl := template.New("")
 
 	tmpl.New("assistant").Parse("{{if eq .IsAssistant true}}[SMS envoyé à {{.RiderName}}] {{end}}")
-	tmpl.New("driver_en_route.eta").Parse("{{if gt .ETA 0}}dans {{.ETA}} minutes{{else}}prochainement{{end}}")
-	tmpl.New("driver_en_route").Parse(`Votre chauffeur {{.DriverName}} arrive {{template "driver_en_route.eta" .}}.`)
+	tmpl.New("driver_en_route").Parse(`Votre chauffeur {{.DriverName}} arrive prochainement.`)
 
 	tmpl, _ = tmpl.Parse(`{{template "assistant" .Assistant}}{{template "driver_en_route" .}}`)
 
-	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2, Assistant{}})
-	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", 2, Assistant{true, "Georges"}})
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", Assistant{}})
+	tmpl.Execute(os.Stdout, &Substitutions{"Patrick", Assistant{true, "Georges"}})
 }
 						</code></pre>
-						<pre class="fragment"><code class="hljs" data-trim>
-Votre chauffeur Patrick arrive dans 2 minutes.
-[SMS envoyé à Georges] Votre chauffeur Patrick arrive dans 2 minutes.
+						<pre class="fragment"><code class="hljs go" data-trim>
+Votre chauffeur Patrick arrive prochainement.
+[SMS envoyé à Georges] Votre chauffeur Patrick arrive prochainement.
 						</code></pre>
 					</section>
 				</section>
 
 				<section>
-					<h1>Fin</h1>
+					<h1>Merci</h1>
+					<img style="max-width: 30%" src="img/cp_big_logo.gif"></img>
 				</section>
 			</div>
 		</div>

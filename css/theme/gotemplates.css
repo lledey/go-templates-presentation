@@ -293,7 +293,8 @@ body {
 
 .reveal section img {
   margin: 0px 0px;
-  border: 0px solid #fff; }
+  border: 0px solid #fff;
+  background-color: transparent; }
 
 .reveal table th,
 .reveal table td {
@@ -304,3 +305,12 @@ body {
 
 .reveal pre {
   width: 100%; }
+
+.reveal pre code {
+  overflow-x: hidden;
+  font-size: .65em;
+  line-height: 1.2em;
+  white-space: pre-wrap; }
+
+.reveal pre code .codetable {
+  word-wrap: break-word; }

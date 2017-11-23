@@ -51,6 +51,7 @@ section.has-light-background {
 .reveal section img {
 	margin: 0px 0px;
 	border: 0px solid $mainColor;
+	background-color: transparent;
 }
 
 .reveal table th,
@@ -61,6 +62,30 @@ section.has-light-background {
 	border-bottom: 0px;
 }
 
+// .reveal pre {
+// 	width: 100%;
+// }
+
+// .slides {
+// 	width: calc(100% - 2rem) !important;
+// 	height: calc(100% - 5rem) !important;
+// }
+
 .reveal pre {
 	width: 100%;
+}
+
+.reveal pre code {
+	overflow-x: hidden;
+	font-size: .65em;
+	line-height: 1.2em;
+	// max-height: 20em;
+	// word-wrap: break-word;
+	white-space: pre-wrap;
+}
+
+.reveal pre code .codetable {
+	// overflow-x: hidden;
+	word-wrap: break-word;
+	// max-height: 20em;
 }
