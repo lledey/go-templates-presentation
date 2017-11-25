@@ -48,6 +48,16 @@ section.has-light-background {
 @import "../template/theme";
 // ---------------------------------------------
 
+.slides {
+	width: calc(100% - 10rem) !important;
+	height: calc(100% - 5rem) !important;
+}
+
+.reveal .slides>section,
+.reveal .slides>section>section {
+	padding: 0px 0px;
+}
+
 .reveal section img {
 	margin: 0px 0px;
 	border: 0px solid $mainColor;
@@ -58,18 +68,9 @@ section.has-light-background {
 .reveal table td {
 	text-align: center;
 	vertical-align: bottom;
-	padding: 0.1em 0.1em 0.1em 0.1em;
+	padding: 0 0 0 0;
 	border-bottom: 0px;
 }
-
-// .reveal pre {
-// 	width: 100%;
-// }
-
-// .slides {
-// 	width: calc(100% - 2rem) !important;
-// 	height: calc(100% - 5rem) !important;
-// }
 
 .reveal pre {
 	width: 100%;
@@ -77,15 +78,8 @@ section.has-light-background {
 
 .reveal pre code {
 	overflow-x: hidden;
-	font-size: .65em;
-	line-height: 1.2em;
-	// max-height: 20em;
-	// word-wrap: break-word;
+	font-size: .68em;
+	line-height: 1.3em;
+	max-height: 100%;
 	white-space: pre-wrap;
-}
-
-.reveal pre code .codetable {
-	// overflow-x: hidden;
-	word-wrap: break-word;
-	// max-height: 20em;
 }
