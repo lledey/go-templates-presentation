@@ -302,7 +302,8 @@ body {
 .reveal section img {
   margin: 0px 0px;
   border: 0px solid #fff;
-  background-color: transparent; }
+  background-color: transparent;
+  box-shadow: 0 0 0 transparent; }
 
 .reveal table th,
 .reveal table td {
